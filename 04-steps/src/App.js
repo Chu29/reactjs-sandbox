@@ -1,17 +1,23 @@
+import { useState } from "react";
+
 const messages = [
   "Learn React ⚛️",
   "Apply for jobs 💼",
   "Invest your new income 🤑",
+  "Work hard, Play hard 🍾",
 ];
 
 function App() {
-  const step = 1;
+  const [step, setStep] = useState(1);
 
   function handlePrevious() {
-    alert("Previous");
+    if (step <= 1) return;
+    setStep(step - 1);
   }
+
   function handleNext() {
-    alert("Next");
+    if (step >= messages.length) return;
+    setStep(step + 1);
   }
 
   return (
@@ -20,6 +26,7 @@ function App() {
         <div className={step >= 1 ? "active" : ""}>1</div>
         <div className={step >= 2 ? "active" : ""}>2</div>
         <div className={step >= 3 ? "active" : ""}>3</div>
+        <div className={step >= 4 ? "active" : ""}>4</div>
       </div>
       <div className="message">
         Step {step}: {messages[step - 1]}
