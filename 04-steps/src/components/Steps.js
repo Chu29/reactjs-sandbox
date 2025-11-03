@@ -12,17 +12,17 @@ function Steps() {
 
   function handlePrevious() {
     if (step <= 1) return;
-    setStep(step - 1);
+    setStep((s) => s - 1);
   }
 
   function handleNext() {
     if (step >= messages.length) return;
-    setStep(step + 1);
+    setStep((s) => s + 1);
   }
 
   return (
     <>
-      <button className="close" onClick={() => setisOpen(!isOpen)}>
+      <button className="close" onClick={() => setisOpen((open) => !open)}>
         &times;
       </button>
       {isOpen && (
