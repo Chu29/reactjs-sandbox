@@ -1,6 +1,9 @@
+import { useState } from "react";
+
 const initialItems = [
   { id: 1, description: "Passports", quantity: 2, packed: false },
   { id: 2, description: "Socks", quantity: 12, packed: false },
+  { id: 3, description: "Charger", quantity: 1, packed: true },
 ];
 
 function App() {
@@ -19,23 +22,44 @@ function Logo() {
 }
 
 function Form() {
-  //event handler function
-  function handleSubmit(event) {
-    event.preventDefault();
-    alert("Form Submited");
-  }
+  const [description, setDescription] = useState("");
+  const [quantity, setQuantity] = useState("1");
 
+  const handleDescriptionChange = (event) => {
+    setDescription(event.target.value);
+  };
+
+  const handleQtyChange = (event) => {
+    setQuantity(Number(event.target.value));
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (!description) return;
+    // alert(`Form submitted ${quantity} ${description}`);
+    const newItem = { id: Date.now(), description, quantity, packed: false };
+    initialItems.push(newItem);
+    console.log(newItem);
+
+    setDescription("");
+    setQuantity(1);
+  };
   return (
     <form className="add-form" onSubmit={handleSubmit}>
       <h3>What do you need for your 😍 trip?</h3>
-      <select name="" id="">
+      <select value={quantity} onChange={handleQtyChange}>
         {Array.from({ length: 20 }, (_, index) => index + 1).map((num) => (
           <option value={num} key={num}>
             {num}
           </option>
         ))}
       </select>
-      <input type="text" placeholder="Item..." />
+      <input
+        type="text"
+        placeholder="Item..."
+        value={description}
+        onChange={handleDescriptionChange}
+      />
       <button>Add</button>
     </form>
   );
