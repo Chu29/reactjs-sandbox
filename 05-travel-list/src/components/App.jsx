@@ -5,15 +5,25 @@ import { useState } from "react";
 //   { id: 2, description: "Socks", quantity: 12, packed: false },
 //   { id: 3, description: "Charger", quantity: 1, packed: true },
 // ];
+import Button from "./button";
 
 function App() {
   const [items, setItems] = useState([]);
+  const handleAddItems = (item) => {
+    setItems((items) => [...items, item]);
+  };
+
+  const handleDeleteItems = (id) => {
+    setItems((items) => items.filter((item) => item.id !== id));
+  };
+
   return (
     <div className="app">
       <Logo />
-      <Form setItems={setItems} />
-      <PackingList items={items} />
+      <Form onAddItems={handleAddItems} />
+      <PackingList items={items} onDeleteItems={handleDeleteItems} />
       <Stats />
+      <Button label="see more"/>
     </div>
   );
 }
@@ -22,13 +32,9 @@ function Logo() {
   return <h1>🏝 Far Away 🧳</h1>;
 }
 
-function Form({ setItems }) {
+function Form({ onAddItems }) {
   const [description, setDescription] = useState("");
   const [quantity, setQuantity] = useState("1");
-
-  const handleAddItems = (item) => {
-    setItems((items) => [...items, item]);
-  };
 
   const handleDescriptionChange = (event) => {
     setDescription(event.target.value);
@@ -45,7 +51,7 @@ function Form({ setItems }) {
     const newItem = { id: Date.now(), description, quantity, packed: false };
     console.log(newItem);
 
-    handleAddItems(newItem);
+    onAddItems(newItem);
 
     setDescription("");
     setQuantity(1);
@@ -72,25 +78,25 @@ function Form({ setItems }) {
   );
 }
 
-function PackingList({ items }) {
+function PackingList({ items, onDeleteItems }) {
   return (
     <div className="list">
       <ul>
         {items.map((item) => (
-          <Item item={item} key={item.id} />
+          <Item item={item} key={item.id} onDeleteItems={onDeleteItems} />
         ))}
       </ul>
     </div>
   );
 }
 
-function Item({ item }) {
+function Item({ item, onDeleteItems }) {
   return (
     <li>
       <span style={item.packed ? { textDecoration: "line-through" } : {}}>
         {item.quantity} {item.description}
       </span>
-      <button>❌</button>
+      <button onClick={() => onDeleteItems(item.id)}>❌</button>
     </li>
   );
 }
